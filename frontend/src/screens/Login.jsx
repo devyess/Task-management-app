@@ -1,4 +1,3 @@
-// filepath: /c:/Users/devye/Desktop/Projects/Task Management App/frontend/src/screens/Login.jsx
 import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from '../config/axios';
@@ -15,8 +14,9 @@ const Login = () => {
     e.preventDefault();
     try {
       const response = await axios.post('/users/login', { email, password });
-      console.log(response.data);
+      console.log(response.data.token, response.data.user);
       login(response.data.token, response.data.user);
+
       navigate('/');
     } catch (error) {
       console.error('Error logging in:', error.response.data);

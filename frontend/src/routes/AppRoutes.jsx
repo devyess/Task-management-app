@@ -3,8 +3,8 @@ import { Route, BrowserRouter, Routes } from 'react-router-dom'
 import Login from '../screens/Login'
 import Home from '../screens/Home'
 import Register from '../screens/Register'
-import TaskMaker from '../components/TaskMaker'
-
+import TaskMaker from '../screens/TaskMaker'
+import Edit from '../screens/Edit'
 const AppRoutes = () => {
       return (
             <BrowserRouter>

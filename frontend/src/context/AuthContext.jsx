@@ -1,15 +1,24 @@
-import React, { createContext, useState } from 'react';
-
-// Create the context
+import React, { createContext, useState, useEffect } from 'react';
 export const AuthContext = createContext();
 
-// Create a provider component
 export const AuthProvider = ({ children }) => {
   const [auth, setAuth] = useState({
     isAuthenticated: false,
     token: null,
     user: null,
   });
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (token && user) {
+      setAuth({
+        isAuthenticated: true,
+        token,
+        user,
+      });
+    }
+  }, []);
 
   const login = (token, user) => {
     setAuth({
@@ -18,6 +27,7 @@ export const AuthProvider = ({ children }) => {
       user,
     });
     localStorage.setItem('token', token);
+    localStorage.setItem('user', JSON.stringify(user));
   };
 
   const logout = () => {
@@ -27,6 +37,7 @@ export const AuthProvider = ({ children }) => {
       user: null,
     });
     localStorage.removeItem('token');
+    localStorage.removeItem('user');
   };
 
   return (

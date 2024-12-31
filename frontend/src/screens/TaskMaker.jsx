@@ -1,23 +1,31 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from '../config/axios';
+import { AuthContext } from '../context/AuthContext';
 
 const TaskMaker = () => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [priority, setPriority] = useState('');
-  const [error, setError] = useState(''); // State to store error message
+  const [priority, setPriority] = useState(1);
+  const [error, setError] = useState('');
   const navigate = useNavigate();
+  const { auth } = useContext(AuthContext);
 
   const handleCreate = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('/tasks/tasks', { title,description,priority });
+      const response = await axios.post('/tasks/tasks', 
+        { title, description, priority },
+        {
+          headers: {
+            Authorization: `Bearer ${auth.token}`,
+          },
+        }
+      );
       console.log(response.data);
-      
       navigate('/');
     } catch (error) {
-      console.error('Error logging in:', error.response.data);
+      console.error('Error creating task:', error.response.data);
       setError('Invalid inputs'); // Set error message
     }
   };
@@ -25,12 +33,12 @@ const TaskMaker = () => {
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-900">
       <div className="w-full max-w-md p-8 space-y-6 bg-gray-800 rounded shadow-md">
-        <h2 className="text-2xl font-bold text-center text-white">Create a Task</h2>
+        <h2 className="text-2xl font-bold text-center text-white">Create Task</h2>
         <form onSubmit={handleCreate} className="space-y-4">
           <div>
             <label htmlFor="title" className="block text-sm font-medium text-gray-300">Title</label>
             <input
-              type="string"
+              type="text"
               id="title"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
@@ -41,7 +49,7 @@ const TaskMaker = () => {
           <div>
             <label htmlFor="description" className="block text-sm font-medium text-gray-300">Description</label>
             <input
-              type="string"
+              type="text"
               id="description"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
