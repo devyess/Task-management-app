@@ -8,15 +8,13 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
-  const { login } = useContext(AuthContext);
 
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
       const response = await axios.post('/users/login', { email, password });
-      console.log(response.data.token, response.data.user);
-      login(response.data.token, response.data.user);
-
+      console.log('Login response:', response.data);
+      localStorage.setItem('token', response.data.token);
       navigate('/');
     } catch (error) {
       console.error('Error logging in:', error.response.data);

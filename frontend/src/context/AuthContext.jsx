@@ -1,4 +1,5 @@
 import React, { createContext, useState, useEffect } from 'react';
+
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
@@ -9,14 +10,18 @@ export const AuthProvider = ({ children }) => {
   });
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    const user = JSON.parse(localStorage.getItem('user'));
-    if (token && user) {
-      setAuth({
-        isAuthenticated: true,
-        token,
-        user,
-      });
+    try {
+      const token = localStorage.getItem('token');
+      const user = localStorage.getItem('user');
+      if (token && user) {
+        setAuth({
+          isAuthenticated: true,
+          token,
+          user: JSON.parse(user),
+        });
+      }
+    } catch (error) {
+      console.error('Error loading auth state from localStorage:', error);
     }
   }, []);
 
@@ -24,10 +29,8 @@ export const AuthProvider = ({ children }) => {
     setAuth({
       isAuthenticated: true,
       token,
-      user,
     });
     localStorage.setItem('token', token);
-    localStorage.setItem('user', JSON.stringify(user));
   };
 
   const logout = () => {

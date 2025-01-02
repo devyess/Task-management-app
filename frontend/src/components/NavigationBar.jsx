@@ -1,13 +1,14 @@
 import React, { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
+import TaskMaker from '../screens/TaskMaker';
 
 const NavigationBar = () => {
   const navigate = useNavigate();
   const { logout } = useContext(AuthContext);
 
   const addTask = () => {
-    console.log('Add Task');
+    navigate('/createTask');
   };
 
   const handleLogout = () => {

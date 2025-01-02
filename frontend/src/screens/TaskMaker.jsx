@@ -9,8 +9,7 @@ const TaskMaker = () => {
   const [priority, setPriority] = useState(1);
   const [error, setError] = useState('');
   const navigate = useNavigate();
-  const { auth } = useContext(AuthContext);
-
+  const auth=localStorage.getItem('token');
   const handleCreate = async (e) => {
     e.preventDefault();
     try {
@@ -18,11 +17,10 @@ const TaskMaker = () => {
         { title, description, priority },
         {
           headers: {
-            Authorization: `Bearer ${auth.token}`,
+            Authorization: `Bearer ${auth}`,
           },
         }
       );
-      console.log(response.data);
       navigate('/');
     } catch (error) {
       console.error('Error creating task:', error.response.data);
